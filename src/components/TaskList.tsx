@@ -23,8 +23,12 @@ const TaskList = ({
 
   const tasksFromStore = useSelector((state: any) => {
     const tasksInOrder = [
-      ...state.taskbox.tasks.filter((t) => t.state === "TASK_PINNED"),
-      ...state.taskbox.tasks.filter((t) => t.state !== "TASK_PINNED"),
+      ...state.taskbox.tasks.filter(
+        (t: TaskProps["task"]) => t.state === "TASK_PINNED"
+      ),
+      ...state.taskbox.tasks.filter(
+        (t: TaskProps["task"]) => t.state !== "TASK_PINNED"
+      ),
     ];
     const filteredTasks = tasksInOrder.filter(
       (t) => t.state === "TASK_INBOX" || t.state === "TASK_PINNED"
@@ -53,7 +57,7 @@ const TaskList = ({
       </span>
     </div>
   );
-  if (loading) {
+  if (status === "loading") {
     return (
       <div className="list-items" data-testid="loading" key={"loading"}>
         {LoadingRow}
@@ -66,7 +70,7 @@ const TaskList = ({
     );
   }
 
-  if (tasks.length === 0) {
+  if (tasksFromStore.length === 0) {
     return (
       <div className="list-items" key={"empty"} data-testid="empty">
         <div className="wrapper-message">
@@ -80,7 +84,7 @@ const TaskList = ({
 
   return (
     <div className="list-items" data-testid="success" key={"success"}>
-      {tasks.map((task) => (
+      {tasksFromStore.map((task) => (
         <Task
           key={task.id}
           task={task}
